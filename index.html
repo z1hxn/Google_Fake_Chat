@@ -109,15 +109,6 @@
       <button id="cancelNick">취소</button>
     </div>
   </div>
-  <div class="popup" id="pwPopup" style="display:none;">
-    <h3>관리자 설정</h3>
-    <input type="password" id="pwInput" placeholder="비밀번호 입력">
-    <div>
-      <button id="pwOk">확인</button>
-      <button id="pwCancel">취소</button>
-    </div>
-    <div id="pwMsg" style="color:red;font-size:13px;margin-top:6px;"></div>
-  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
@@ -164,13 +155,6 @@
     // 대한민국, 설정 버튼
     const koreaBtn = document.querySelector('.footer .left');
     const settingBtn = document.querySelector('.footer .right a:last-child');
-
-    // 비밀번호 팝업 관련
-    const pwPopup = document.getElementById('pwPopup');
-    const pwInput = document.getElementById('pwInput');
-    const pwOk = document.getElementById('pwOk');
-    const pwCancel = document.getElementById('pwCancel');
-    const pwMsg = document.getElementById('pwMsg');
 
     let nickname = localStorage.getItem('nick') || 'User';
     updateProfileDisplay();
@@ -234,43 +218,17 @@
       render();
     });
 
-    // 설정 버튼 클릭 시 비밀번호 팝업
-    settingBtn.addEventListener('click',()=>{
-      pwInput.value = '';
-      pwMsg.textContent = '';
-      pwPopup.style.display = 'block';
-      overlay.style.display = 'block';
-      pwInput.focus();
-    });
-    pwCancel.addEventListener('click',closePwPopup);
-    overlay.addEventListener('click',()=>{
-      closePopup();
-      closePwPopup();
-    });
-
-    pwOk.addEventListener('click', async ()=>{
-      if(pwInput.value === '0429'){
-        pwMsg.textContent = '';
+    // 설정 버튼 클릭 시 비밀번호 없이 바로 리셋 확인
+    settingBtn.addEventListener('click', async () => {
+      const ok = confirm('모든 대화를 리셋하시겠습니까?');
+      if (ok) {
         await resetAllMessages();
-        closePwPopup();
         alert('모든 대화가 리셋되었습니다.');
-      }else{
-        pwMsg.textContent = '비밀번호가 틀렸습니다.';
-      }
-    });
-
-    pwInput.addEventListener('keydown', e=>{
-      if(e.key==='Enter'){
-        pwOk.click();
       }
     });
 
     function closePopup(){
       popup.style.display='none';
-      overlay.style.display='none';
-    }
-    function closePwPopup(){
-      pwPopup.style.display='none';
       overlay.style.display='none';
     }
 
