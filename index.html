@@ -1,89 +1,261 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.3.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.3.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Google</title>
+  <style>
+    body{margin:0;font-family:Arial, sans-serif;background:#fff;color:#202124;}
+    .topbar{height:48px;display:flex;align-items:center;justify-content:flex-end;padding:0 12px;gap:16px;}
+    .gmail-link{font-size:14px;color:#5f6368;cursor:pointer;}
+    .gmail-link:hover{text-decoration:underline;}
+    .profile{width:32px;height:32px;border-radius:50%;background:#4285F4;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:bold;user-select:none;}
+    .main{display:flex;flex-direction:column;align-items:center;margin-top:120px;}
+    .logo{margin-bottom:24px;}
+    .logo img{width:272px;height:auto;}
+    .searchbox{width:min(600px,90%);}
+    .searchform{display:flex;align-items:center;border:1px solid #dadce0;padding:10px 14px;border-radius:24px;}
+    .searchform input{flex:1;border:0;outline:none;font-size:16px;}
+    .suggestions {
+      margin-top:12px;
+      border:1px solid #e8eaed;
+      border-radius:8px;
+      overflow-y:auto;
+      max-height:300px; /* allow scrolling if more messages */
+    }
+    .sugg-header{padding:8px 14px;font-size:13px;color:#70757a;border-bottom:1px solid #f1f3f4;background:#f8f9fa;}
+    .sugg-item{padding:8px 14px;border-bottom:1px solid #f1f3f4;display:flex;justify-content:space-between;font-size:14px;}
+    .sugg-item:last-child{border-bottom:0;}
+    .meta{font-size:11px;color:#5f6368;margin-left:8px;white-space:nowrap;}
+    .chat-toggle{position:fixed;bottom:10px;left:10px;z-index:2000;}
+    .popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border:1px solid #dadce0;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.2);padding:20px;z-index:1000;display:none;}
+    .popup input{width:100%;padding:8px;font-size:14px;margin-bottom:10px;}
+    .popup button{padding:6px 12px;font-size:14px;}
+    .overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.3);z-index:999;display:none;}
+    .top-links {
+      margin-top:8px;
+      margin-left:16px;
+      font-size:12px;
+      color:#70757a;
+      text-align:left;
+    }
+    .top-links a {
+      color:inherit;
+      text-decoration:none;
+      margin-right:16px;
+      cursor:pointer;
+    }
+    .top-links a:hover {
+      text-decoration:underline;
+    }
+    .footer {
+      background:#f2f2f2;
+      color:#70757a;
+      font-size:14px;
+      padding:12px 24px;
+      display:flex;
+      justify-content:space-between;
+      position:fixed;
+      bottom:0;
+      left:0;
+      right:0;
+    }
+    .footer .left {
+      align-self:center;
+      margin-left: 20px;
+    }
+    .footer .right a {
+      margin-right:16px;
+      color:inherit;
+      text-decoration:none;
+      cursor:pointer;
+    }
+    .footer .right a:hover {
+      text-decoration:underline;
+    }
+    .top-links .gmail-link {
+      display:inline;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="gmail-link">이미지</div>
+    <div class="gmail-link">Gmail</div>
+    <div id="profile" class="profile" title="닉네임 설정">N</div>
+  </div>
+  <div class="top-links">
+    <span class="gmail-link">Google 정보</span>
+    <span class="gmail-link">스토어</span>
+  </div>
+  <div class="main">
+    <div class="logo"><img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google"></div>
+    <div class="searchbox">
+      <form class="searchform" onsubmit="return false;">
+        <input id="q" type="text" placeholder="검색어 입력" autocomplete="off" />
+      </form>
+      <div class="suggestions" id="feed">
+        <div class="sugg-header">연관 검색어</div>
+      </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+  </div>
+  <div class="chat-toggle">
+    <input type="checkbox" id="chatToggle" title="채팅 모드" checked>
+  </div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <h3>닉네임 설정</h3>
+    <input type="text" id="nickInput" placeholder="닉네임 입력">
+    <div>
+      <button id="saveNick">저장</button>
+      <button id="cancelNick">취소</button>
+    </div>
+  </div>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCcFnqI0ASZgyjmFs-W9w8NZNeGyxGiOU0",
+      authDomain: "fake-chat-6a215.firebaseapp.com",
+      projectId: "fake-chat-6a215",
+      storageBucket: "fake-chat-6a215.firebasestorage.app",
+      messagingSenderId: "692426402317",
+      appId: "1:692426402317:web:d7789f7a6bf10e15650344"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const messagesRef = collection(db, 'messages');
+
+    async function sendMessage(text, nick) {
+      try {
+        const docRef = await addDoc(messagesRef, {
+          text: text,
+          nick: nick,
+          t: Date.now()
+        });
+        console.log("메시지 추가됨:", docRef.id);   // 로그 확인용
+      } catch (e) {
+        console.error("메시지 추가 실패:", e);
+      }
+    }
+
+    const q = document.getElementById('q');
+    const feed = document.getElementById('feed');
+    const profile = document.getElementById('profile');
+    const chatToggle = document.getElementById('chatToggle');
+    const popup = document.getElementById('popup');
+    const overlay = document.getElementById('overlay');
+    const nickInput = document.getElementById('nickInput');
+    const saveNick = document.getElementById('saveNick');
+    const cancelNick = document.getElementById('cancelNick');
+
+    let nickname = localStorage.getItem('nick') || 'User';
+    updateProfileDisplay();
+
+    let messages = [];
+
+    function updateProfileDisplay(){
+      if(nickname && nickname.length > 0){
+        profile.textContent = nickname[0].toUpperCase();
+        profile.title = `현재 닉네임: ${nickname}`;
+      } else {
+        profile.textContent = 'U';
+        profile.title = '닉네임 설정';
+      }
+    }
+
+    function render(){
+      if(!chatToggle.checked){
+        feed.innerHTML='';
+        return;
+      }
+      feed.innerHTML = '<div class="sugg-header">채팅 메시지</div>';
+      // 최신 메시지가 위에 오도록 정렬 (reverse 제거)
+      messages.slice(-50).forEach(m=>{
+        const el=document.createElement('div');
+        el.className='sugg-item';
+        el.innerHTML='<div>'+m.text+'</div><div class="meta">'+m.nick+' · '+new Date(m.t).toLocaleTimeString()+'</div>';
+        feed.appendChild(el);
       });
-    </script>
-  </body>
+    }
+
+    q.addEventListener('keydown', e=>{
+      if(e.key==='Enter' && !e.isComposing){
+        e.preventDefault();
+        const text=q.value.trim();
+        if(chatToggle.checked){
+          if(text){
+            sendMessage(text, nickname);
+          }
+        } else {
+          if(text){
+            const url = 'https://www.google.com/search?q=' + encodeURIComponent(text);
+            window.location.href = url;
+          }
+        }
+        q.value='';
+      }
+    });
+
+    chatToggle.addEventListener('change',()=>{
+      if(!chatToggle.checked){
+        feed.innerHTML='';
+      } else {
+        render();
+      }
+    });
+
+    profile.addEventListener('click',()=>{
+      nickInput.value = nickname;
+      popup.style.display = 'block';
+      overlay.style.display = 'block';
+      nickInput.focus();
+    });
+
+    saveNick.addEventListener('click',()=>{
+      const newNick = nickInput.value.trim();
+      if(newNick){
+        nickname=newNick;
+        localStorage.setItem('nick',nickname);
+        updateProfileDisplay();
+      }
+      closePopup();
+    });
+
+    cancelNick.addEventListener('click',closePopup);
+    overlay.addEventListener('click',closePopup);
+
+    function closePopup(){
+      popup.style.display='none';
+      overlay.style.display='none';
+    }
+
+    const qSnap = query(messagesRef, orderBy('t', 'desc'), limit(50));
+    onSnapshot(qSnap, snapshot => {
+      messages = [];
+      snapshot.forEach(doc => {
+        messages.push(doc.data());
+      });
+      render();
+    });
+
+    render();
+  </script>
+
+  <div class="footer">
+    <div class="left">대한민국</div>
+    <div class="right">
+      <a href="#">광고</a>
+      <a href="#">비즈니스</a>
+      <a href="#">검색의 원리</a>
+      <a href="#">개인정보처리방침</a>
+      <a href="#">약관</a>
+      <a href="#">설정</a>
+    </div>
+  </div>
+</body>
 </html>
