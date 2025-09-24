@@ -94,13 +94,10 @@
       <form class="searchform" onsubmit="return false;">
         <input id="q" type="text" placeholder="검색어 입력" autocomplete="off" />
       </form>
-      <div class="suggestions" id="feed">
+      <div class="suggestions" id="feed" style="display:none;">
         <div class="sugg-header">연관 검색어</div>
       </div>
     </div>
-  </div>
-  <div class="chat-toggle">
-    <input type="checkbox" id="chatToggle" title="채팅 모드" checked>
   </div>
 
   <div class="overlay" id="overlay"></div>
@@ -112,10 +109,19 @@
       <button id="cancelNick">취소</button>
     </div>
   </div>
+  <div class="popup" id="pwPopup" style="display:none;">
+    <h3>관리자 설정</h3>
+    <input type="password" id="pwInput" placeholder="비밀번호 입력">
+    <div>
+      <button id="pwOk">확인</button>
+      <button id="pwCancel">취소</button>
+    </div>
+    <div id="pwMsg" style="color:red;font-size:13px;margin-top:6px;"></div>
+  </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCcFnqI0ASZgyjmFs-W9w8NZNeGyxGiOU0",
@@ -143,15 +149,28 @@
       }
     }
 
-    const q = document.getElementById('q');
+    // 채팅모드 기본 꺼짐
+    let chatMode = false;
+
+    // 채팅 토글 제거, 대신 대한민국 버튼으로 전환
     const feed = document.getElementById('feed');
+    const q = document.getElementById('q');
     const profile = document.getElementById('profile');
-    const chatToggle = document.getElementById('chatToggle');
     const popup = document.getElementById('popup');
     const overlay = document.getElementById('overlay');
     const nickInput = document.getElementById('nickInput');
     const saveNick = document.getElementById('saveNick');
     const cancelNick = document.getElementById('cancelNick');
+    // 대한민국, 설정 버튼
+    const koreaBtn = document.querySelector('.footer .left');
+    const settingBtn = document.querySelector('.footer .right a:last-child');
+
+    // 비밀번호 팝업 관련
+    const pwPopup = document.getElementById('pwPopup');
+    const pwInput = document.getElementById('pwInput');
+    const pwOk = document.getElementById('pwOk');
+    const pwCancel = document.getElementById('pwCancel');
+    const pwMsg = document.getElementById('pwMsg');
 
     let nickname = localStorage.getItem('nick') || 'User';
     updateProfileDisplay();
@@ -169,13 +188,13 @@
     }
 
     function render(){
-      if(!chatToggle.checked){
-        feed.innerHTML='';
+      if(!chatMode){
+        feed.style.display = 'none';
         return;
       }
+      feed.style.display = '';
       feed.innerHTML = '<div class="sugg-header">채팅 메시지</div>';
-      // 최신 메시지가 위에 오도록 정렬 (reverse 제거)
-      messages.slice(-50).forEach(m=>{
+      messages.forEach(m=>{
         const el=document.createElement('div');
         el.className='sugg-item';
         el.innerHTML='<div>'+m.text+'</div><div class="meta">'+m.nick+' · '+new Date(m.t).toLocaleTimeString()+'</div>';
@@ -187,7 +206,7 @@
       if(e.key==='Enter' && !e.isComposing){
         e.preventDefault();
         const text=q.value.trim();
-        if(chatToggle.checked){
+        if(chatMode){
           if(text){
             sendMessage(text, nickname);
           }
@@ -201,14 +220,81 @@
       }
     });
 
-    chatToggle.addEventListener('change',()=>{
-      if(!chatToggle.checked){
-        feed.innerHTML='';
-      } else {
-        render();
+    // 대한민국 버튼 클릭 시 채팅모드 토글
+    let koreaOn = false;
+    function updateKoreaBtn(){
+      koreaBtn.textContent = koreaOn ? '대한민국(켜짐)' : '대한민국';
+    }
+    koreaBtn.style.cursor = 'pointer';
+    updateKoreaBtn();
+    koreaBtn.addEventListener('click',()=>{
+      koreaOn = !koreaOn;
+      chatMode = koreaOn;
+      updateKoreaBtn();
+      render();
+    });
+
+    // 설정 버튼 클릭 시 비밀번호 팝업
+    settingBtn.addEventListener('click',()=>{
+      pwInput.value = '';
+      pwMsg.textContent = '';
+      pwPopup.style.display = 'block';
+      overlay.style.display = 'block';
+      pwInput.focus();
+    });
+    pwCancel.addEventListener('click',closePwPopup);
+    overlay.addEventListener('click',()=>{
+      closePopup();
+      closePwPopup();
+    });
+
+    pwOk.addEventListener('click', async ()=>{
+      if(pwInput.value === '0429'){
+        pwMsg.textContent = '';
+        await resetAllMessages();
+        closePwPopup();
+        alert('모든 대화가 리셋되었습니다.');
+      }else{
+        pwMsg.textContent = '비밀번호가 틀렸습니다.';
       }
     });
 
+    pwInput.addEventListener('keydown', e=>{
+      if(e.key==='Enter'){
+        pwOk.click();
+      }
+    });
+
+    function closePopup(){
+      popup.style.display='none';
+      overlay.style.display='none';
+    }
+    function closePwPopup(){
+      pwPopup.style.display='none';
+      overlay.style.display='none';
+    }
+
+    // Firestore 메시지 전체 삭제
+    async function resetAllMessages(){
+      const qSnap = await getDocs(collection(db, 'messages'));
+      const batch = [];
+      qSnap.forEach(docu=>{
+        batch.push(deleteDoc(doc(db, 'messages', docu.id)));
+      });
+      await Promise.all(batch);
+    }
+
+    // 실시간 메시지 구독
+    const qSnap = query(messagesRef, orderBy('t', 'desc'), limit(50));
+    onSnapshot(qSnap, snapshot => {
+      messages = [];
+      snapshot.forEach(doc => {
+        messages.push(doc.data());
+      });
+      render();
+    });
+
+    // 닉네임 팝업
     profile.addEventListener('click',()=>{
       nickInput.value = nickname;
       popup.style.display = 'block';
@@ -227,21 +313,6 @@
     });
 
     cancelNick.addEventListener('click',closePopup);
-    overlay.addEventListener('click',closePopup);
-
-    function closePopup(){
-      popup.style.display='none';
-      overlay.style.display='none';
-    }
-
-    const qSnap = query(messagesRef, orderBy('t', 'desc'), limit(50));
-    onSnapshot(qSnap, snapshot => {
-      messages = [];
-      snapshot.forEach(doc => {
-        messages.push(doc.data());
-      });
-      render();
-    });
 
     render();
   </script>
