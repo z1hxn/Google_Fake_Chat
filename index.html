@@ -4,9 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Google</title>
+  <link rel="icon" href="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_16dp.png">
   <style>
     body{margin:0;font-family:Arial, sans-serif;background:#fff;color:#202124;}
-    .topbar{height:48px;display:flex;align-items:center;justify-content:flex-end;padding:0 12px;gap:16px;}
+    .topbar{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;}
     .gmail-link{font-size:14px;color:#5f6368;cursor:pointer;}
     .gmail-link:hover{text-decoration:underline;}
     .profile{width:32px;height:32px;border-radius:50%;background:#4285F4;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:bold;user-select:none;}
@@ -48,45 +49,176 @@
     .top-links a:hover {
       text-decoration:underline;
     }
-    .footer {
-      background:#f2f2f2;
-      color:#70757a;
-      font-size:14px;
-      padding:12px 24px;
-      display:flex;
-      justify-content:space-between;
-      position:fixed;
-      bottom:0;
-      left:0;
-      right:0;
+    .footer-bar {
+      width: 100%;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      background: #f2f2f2;
+      color: #70757a;
+      font-size: 14px;
+      z-index: 100;
+      box-shadow: 0 -1px 4px rgba(0,0,0,0.04);
     }
-    .footer .left {
-      align-self:center;
-      margin-left: 20px;
+    .footer-top {
+      padding: 12px 32px;
+      border-bottom: 1px solid #e4e4e4;
+      background: #f2f2f2;
+      text-align: left;
     }
-    .footer .right a {
-      margin-right:16px;
-      color:inherit;
-      text-decoration:none;
-      cursor:pointer;
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 32px;
+      background: #f2f2f2;
     }
-    .footer .right a:hover {
-      text-decoration:underline;
+    .footer-bottom-left, .footer-bottom-right {
+      display: flex;
+      gap: 18px;
     }
-    .top-links .gmail-link {
-      display:inline;
+    .footer-link {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .footer-link:hover {
+      text-decoration: underline;
+    }
+    #koreaBtn {
+      cursor: pointer;
+    }
+    .search-buttons {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .search-buttons button {
+      background-color: #f8f9fa;
+      border: 1px solid #f8f9fa;
+      border-radius: 4px;
+      color: #3c4043;
+      cursor: pointer;
+      font-family: arial,sans-serif;
+      font-size: 14px;
+      margin: 11px 4px;
+      padding: 0 16px;
+      line-height: 27px;
+      height: 36px;
+      min-width: 54px;
+      text-align: center;
+      user-select: none;
+    }
+    .search-buttons button:hover {
+      box-shadow: 0 1px 1px rgba(0,0,0,.1);
+      background-color: #f8f9fa;
+      border: 1px solid #dadce0;
+      color: #202124;
+    }
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      z-index: 1000;
+      display: none;
+      max-width: 400px;
+      width: 90%;
+    }
+    .popup-header {
+      border-bottom: 1px solid #e8eaed;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    .popup-header h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #202124;
+    }
+    .popup-buttons {
+      text-align: right;
+      margin-top: 15px;
+    }
+    .help-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      z-index: 1001;
+      max-width: 500px;
+      width: 90%;
+    }
+    .help-content ul {
+      padding-left: 20px;
+      color: #3c4043;
+    }
+    .help-checkbox {
+      margin: 15px 0;
+    }
+    .help-close-btn {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      float: right;
+    }
+    .admin-popup, .admin-dashboard, .reset-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      z-index: 1000;
+      display: none;
+      max-width: 400px;
+      width: 90%;
+    }
+    .admin-dashboard {
+      max-width: 600px;
+    }
+    .user-list {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .user-item {
+      padding: 8px;
+      border-bottom: 1px solid #e8eaed;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .user-item:last-child {
+      border-bottom: none;
     }
   </style>
 </head>
 <body>
   <div class="topbar">
-    <div class="gmail-link">이미지</div>
-    <div class="gmail-link">Gmail</div>
-    <div id="profile" class="profile" title="닉네임 설정">N</div>
-  </div>
-  <div class="top-links">
-    <span class="gmail-link">Google 정보</span>
-    <span class="gmail-link">스토어</span>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div class="gmail-link">Google 정보</div>
+      <div class="gmail-link">스토어</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div class="gmail-link">이미지</div>
+      <div class="gmail-link">Gmail</div>
+      <div id="profile" class="profile" title="닉네임 설정">N</div>
+    </div>
   </div>
   <div class="main">
     <div class="logo"><img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google"></div>
@@ -98,15 +230,126 @@
         <div class="sugg-header">연관 검색어</div>
       </div>
     </div>
+    <div class="search-buttons" id="searchButtons" style="display:none;">
+      <button type="button" id="googleSearch">Google 검색</button>
+      <button type="button" id="feelingLucky">I'm Feeling Lucky</button>
+    </div>
   </div>
 
   <div class="overlay" id="overlay"></div>
   <div class="popup" id="popup">
-    <h3>닉네임 설정</h3>
-    <input type="text" id="nickInput" placeholder="닉네임 입력">
-    <div>
-      <button id="saveNick">저장</button>
-      <button id="cancelNick">취소</button>
+    <div class="popup-header">
+      <h3>닉네임 설정</h3>
+      <button type="button" id="closePopup" style="background: none; border: none; font-size: 18px; cursor: pointer; float: right;" title="닫기">&times;</button>
+    </div>
+    <div class="popup-body">
+      <input type="text" id="nickInput" placeholder="닉네임을 입력하세요" style="width: 100%; padding: 12px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; margin: 15px 0; box-sizing: border-box;">
+      <div class="popup-buttons">
+        <button id="saveNick" style="background-color: #1a73e8; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 8px;">저장</button>
+        <button id="cancelNick" style="background-color: #f8f9fa; color: #3c4043; border: 1px solid #dadce0; padding: 8px 16px; border-radius: 4px; cursor: pointer;">취소</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 사용방법 안내 팝업 -->
+  <div class="help-popup" id="helpPopup" style="display:none;">
+    <div class="help-content">
+      <h3>🌟 사용방법 안내</h3>
+      <ul>
+        <li>기본 상태에서는 구글 검색창으로 작동합니다</li>
+        <li>하단 <strong>대한민국</strong> 버튼을 클릭하면 일반모드와 채팅모드 간 전환을 할 수 있습니다</li>
+        <li><strong>약관</strong>을 클릭하면 모든 대화가 초기화됩니다</li>
+        <li>개인정보처리방침을 클릭하면 현재 접속자를 볼 수 있습니다.</li>
+        <li>사용 중 선생님이 오실 경우 <strong>Control + R</strong>를 눌러 새로고침하여 빠르게 일반모드로 전환하세요.</li>
+      </ul>
+      <div class="help-checkbox">
+        <input type="checkbox" id="dontShowAgain"> 다시 보지 않기
+      </div>
+      <button id="closeHelp" class="help-close-btn">확인</button>
+    </div>
+  </div>
+
+  <!-- 개인정보처리방침 팝업 (현재 접속자 목록) -->
+  <div class="admin-popup" id="privacyPopup" style="display:none;">
+    <div class="popup-header">
+      <h3>현재 접속자</h3>
+      <button type="button" id="closePrivacy" style="background: none; border: none; font-size: 18px; cursor: pointer; float: right;" title="닫기">&times;</button>
+    </div>
+    <div class="popup-body">
+      <div id="connectedUsers">
+        <p>현재 접속중인 사용자 목록을 로딩중입니다...</p>
+      </div>
+      <div class="popup-buttons">
+        <button id="refresUsers" style="background-color: #1a73e8; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">새로고침</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 관리자 인증 팝업 -->
+  <div class="admin-popup" id="adminPopup" style="display:none;">
+    <div class="popup-header">
+      <h3>관리자 인증</h3>
+      <button type="button" id="closeAdminPopup" style="background: none; border: none; font-size: 18px; cursor: pointer; float: right;" title="닫기">&times;</button>
+    </div>
+    <div class="popup-body">
+      <input type="password" id="adminPasswordInput" placeholder="관리자 비밀번호를 입력하세요" style="width: 100%; padding: 12px; border: 1px solid #dadce0; border-radius: 4px; font-size: 14px; margin: 15px 0; box-sizing: border-box;">
+      <div class="popup-buttons">
+        <button id="adminLogin" style="background-color: #1a73e8; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 8px;">로그인</button>
+        <button id="cancelAdmin" style="background-color: #f8f9fa; color: #3c4043; border: 1px solid #dadce0; padding: 8px 16px; border-radius: 4px; cursor: pointer;">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 관리자 대시보드 -->
+  <div class="admin-dashboard" id="adminDashboard" style="display:none;">
+    <div class="popup-header">
+      <h3>관리자 대시보드</h3>
+      <button type="button" id="closeDashboard" style="background: none; border: none; font-size: 18px; cursor: pointer; float: right;" title="닫기">&times;</button>
+    </div>
+    <div class="popup-body">
+      <div id="adminContent">
+        <div id="resetCounter" style="margin-bottom: 20px; padding: 12px; background: #f8f9fa; border-radius: 4px; text-align: center;">
+          <strong>다음 자동 초기화까지:</strong> <span id="countdownTime" style="color: #ea4335; font-weight: bold;">계산 중...</span>
+        </div>
+        <!-- 관리자 기능들이 들어갈 예정 -->
+      </div>
+      <div class="popup-buttons">
+        <button id="closeAdminDashboard" style="background-color: #1a73e8; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 약관 리셋 확인 팝업 -->
+  <div class="reset-popup" id="resetPopup" style="display:none;">
+    <div class="popup-header">
+      <h3>대화 초기화</h3>
+      <button type="button" id="closeResetPopup" style="background: none; border: none; font-size: 18px; cursor: pointer; float: right;" title="닫기">&times;</button>
+    </div>
+    <div class="popup-body">
+      <p>모든 대화를 초기화하시겠습니까?</p>
+      <p style="font-size: 12px; color: #5f6368; margin-top: 8px;">이 작업은 되돌릴 수 없습니다.</p>
+      <div class="popup-buttons">
+        <button id="confirmReset" style="background-color: #ea4335; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 8px;">초기화</button>
+        <button id="cancelReset" style="background-color: #f8f9fa; color: #3c4043; border: 1px solid #dadce0; padding: 8px 16px; border-radius: 4px; cursor: pointer;">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <div class="footer-top">
+      <span id="koreaBtn" class="footer-link">대한민국</span>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
+        <a href="#" class="footer-link">광고</a>
+        <a href="#" class="footer-link">비즈니스</a>
+        <a href="#" class="footer-link">검색의 원리</a>
+      </div>
+      <div class="footer-bottom-right">
+        <a href="#" id="privacyBtn" class="footer-link">개인정보처리방침</a>
+        <a href="#" id="termsBtn" class="footer-link">약관</a>
+        <a href="#" id="settingBtn" class="footer-link">설정</a>
+      </div>
     </div>
   </div>
 
@@ -140,26 +383,49 @@
       }
     }
 
+    // 기존 footer 관련 DOM 제거, 새 하단바 DOM 참조
+    const koreaBtn = document.getElementById('koreaBtn');
+    const settingBtn = document.getElementById('settingBtn');
+
     // 채팅모드 기본 꺼짐
     let chatMode = false;
+    let koreaOn = false;
 
-    // 채팅 토글 제거, 대신 대한민국 버튼으로 전환
-    const feed = document.getElementById('feed');
-    const q = document.getElementById('q');
+    function updateKoreaBtn(){
+      koreaBtn.textContent = koreaOn ? '대한민국*' : '대한민국';
+    }
+    updateKoreaBtn();
+
+    koreaBtn.addEventListener('click',()=>{
+      koreaOn = !koreaOn;
+      chatMode = koreaOn;
+      updateKoreaBtn();
+      render();
+    });
+
+    // 설정 버튼 클릭 시 관리자 인증 팝업 표시
+    settingBtn.addEventListener('click', () => {
+      document.getElementById('adminPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('adminPasswordInput').focus();
+    });
+
+    // 약관 버튼 클릭 시 리셋 확인 팝업
+    document.getElementById('termsBtn').addEventListener('click', () => {
+      document.getElementById('resetPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    });
+
+    // 닉네임 관련 코드
     const profile = document.getElementById('profile');
     const popup = document.getElementById('popup');
     const overlay = document.getElementById('overlay');
     const nickInput = document.getElementById('nickInput');
     const saveNick = document.getElementById('saveNick');
     const cancelNick = document.getElementById('cancelNick');
-    // 대한민국, 설정 버튼
-    const koreaBtn = document.querySelector('.footer .left');
-    const settingBtn = document.querySelector('.footer .right a:last-child');
 
     let nickname = localStorage.getItem('nick') || 'User';
     updateProfileDisplay();
-
-    let messages = [];
 
     function updateProfileDisplay(){
       if(nickname && nickname.length > 0){
@@ -171,12 +437,20 @@
       }
     }
 
+    // feed, q, messages 변수 선언 추가
+    const q = document.getElementById('q');
+    const feed = document.getElementById('feed');
+    let messages = [];
+
     function render(){
+      const searchButtons = document.getElementById('searchButtons');
       if(!chatMode){
         feed.style.display = 'none';
+        searchButtons.style.display = 'block';
         return;
       }
       feed.style.display = '';
+      searchButtons.style.display = 'none';
       feed.innerHTML = '<div class="sugg-header">연관 검색어</div>';
       messages.forEach(m=>{
         const el=document.createElement('div');
@@ -204,33 +478,22 @@
       }
     });
 
-    // 대한민국 버튼 클릭 시 채팅모드 토글
-    let koreaOn = false;
-    function updateKoreaBtn(){
-      koreaBtn.textContent = koreaOn ? '대한민국(켜짐)' : '대한민국';
-    }
-    koreaBtn.style.cursor = 'pointer';
-    updateKoreaBtn();
-    koreaBtn.addEventListener('click',()=>{
-      koreaOn = !koreaOn;
-      chatMode = koreaOn;
-      updateKoreaBtn();
-      render();
-    });
-
-    // 설정 버튼 클릭 시 비밀번호 없이 바로 리셋 확인
-    settingBtn.addEventListener('click', async () => {
-      const ok = confirm('모든 대화를 리셋하시겠습니까?');
-      if (ok) {
-        await resetAllMessages();
-        alert('모든 대화가 리셋되었습니다.');
+    // 검색 버튼들
+    document.getElementById('googleSearch').addEventListener('click', ()=>{
+      const text=q.value.trim();
+      if(text){
+        const url = 'https://www.google.com/search?q=' + encodeURIComponent(text);
+        window.location.href = url;
       }
     });
-
-    function closePopup(){
-      popup.style.display='none';
-      overlay.style.display='none';
-    }
+    
+    document.getElementById('feelingLucky').addEventListener('click', ()=>{
+      const text=q.value.trim();
+      if(text){
+        const url = 'https://www.google.com/search?q=' + encodeURIComponent(text) + '&btnI=I%27m+Feeling+Lucky';
+        window.location.href = url;
+      }
+    });
 
     // Firestore 메시지 전체 삭제
     async function resetAllMessages(){
@@ -240,6 +503,11 @@
         batch.push(deleteDoc(doc(db, 'messages', docu.id)));
       });
       await Promise.all(batch);
+      
+      // System 메시지 추가
+      if(chatMode) {
+        await sendMessage('메시지가 리셋되었습니다.', 'System');
+      }
     }
 
     // 실시간 메시지 구독
@@ -260,6 +528,20 @@
       nickInput.focus();
     });
 
+    // 닉네임 입력 필드에서 엔터키 처리
+    nickInput.addEventListener('keypress', (e) => {
+      if(e.key === 'Enter') {
+        e.preventDefault();
+        const newNick = nickInput.value.trim();
+        if(newNick){
+          nickname=newNick;
+          localStorage.setItem('nick',nickname);
+          updateProfileDisplay();
+        }
+        closePopup();
+      }
+    });
+
     saveNick.addEventListener('click',()=>{
       const newNick = nickInput.value.trim();
       if(newNick){
@@ -272,19 +554,217 @@
 
     cancelNick.addEventListener('click',closePopup);
 
+    // 닉네임 팝업 X 버튼
+    document.getElementById('closePopup').addEventListener('click', closePopup);
+
+    function closePopup(){
+      popup.style.display = 'none';
+      overlay.style.display = 'none';
+    }
+
+    // 사용방법 안내 기능 - 1시간 동안 안보기
+    function showHelpPopup() {
+      const dontShowAgainTime = localStorage.getItem('dontShowHelp');
+      const now = Date.now();
+      const oneHour = 60 * 60 * 1000; // 1시간
+      
+      if (!dontShowAgainTime || (now - parseInt(dontShowAgainTime)) > oneHour) {
+        document.getElementById('helpPopup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+      }
+    }
+
+    // 도움말 관련 이벤트 리스너
+    document.getElementById('closeHelp').addEventListener('click', () => {
+      const dontShow = document.getElementById('dontShowAgain').checked;
+      if (dontShow) {
+        localStorage.setItem('dontShowHelp', Date.now().toString());
+      }
+      document.getElementById('helpPopup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    });
+
+    // 페이지 로드 시 도움말 표시
+    if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+      showHelpPopup();
+    }
+
+    // 개인정보처리방침 버튼 - 현재 접속자 팝업
+    document.getElementById('privacyBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      loadConnectedUsers();
+      document.getElementById('privacyPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    });
+
+    // 자동 초기화을 위한 변수 (3분 = 180000ms)
+    let autoResetInterval = setInterval(async () => {
+      await resetAllMessages();
+      alert('3분이 지나 자동으로 대화가 초기화되었습니다.');
+      updateResetCountdown();
+    }, 180000);
+
+    let resetStartTime = Date.now();
+
+    // 초기화까지 남은 시간 업데이트
+    function updateResetCountdown() {
+      resetStartTime = Date.now();
+    }
+
+    function startResetCountdown() {
+      setInterval(() => {
+        const now = Date.now();
+        const elapsed = now - resetStartTime;
+        const remaining = 180000 - elapsed;
+        
+        if (remaining <= 0) {
+          document.getElementById('countdownTime').textContent = '자동 초기화 중...';
+          return;
+        }
+        
+        const minutes = Math.floor(remaining / 60000);
+        const seconds = Math.floor((remaining % 60000) / 1000);
+        document.getElementById('countdownTime').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}분`;
+      }, 1000);
+    }
+
+    // 관리자 인증 관련 이벤트
+    document.getElementById('adminLogin').addEventListener('click', () => {
+      const password = document.getElementById('adminPasswordInput').value;
+      if (password === '0429') {
+        document.getElementById('adminPopup').style.display = 'none';
+        document.getElementById('adminDashboard').style.display = 'block';
+        document.getElementById('adminPasswordInput').value = '';
+        
+        // 카운트다운 시작
+        startResetCountdown();
+      } else {
+        alert('비밀번호가 틀렸습니다.');
+      }
+    });
+
+    // 관리자 대시보드 닫기
+    document.getElementById('closeDashboard').addEventListener('click', () => {
+      document.getElementById('adminDashboard').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    });
+
+    document.getElementById('closeAdminDashboard').addEventListener('click', () => {
+      document.getElementById('adminDashboard').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    });
+
+    // 관리자 인증 팝업 닫기
+    document.getElementById('closeAdminPopup').addEventListener('click', () => {
+      document.getElementById('adminPopup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    });
+
+    document.getElementById('cancelAdmin').addEventListener('click', () => {
+      document.getElementById('adminPopup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    });
+
+    // 개인정보처리방침 팝업 닫기
+    document.getElementById('closePrivacy').addEventListener('click', () => {
+      document.getElementById('privacyPopup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    });
+
+    document.getElementById('refresUsers').addEventListener('click', () => {
+      loadConnectedUsers();
+    });
+
+    // 현실적인 접속자 정보 로드 함수 (국가별 IP 대응)
+    async function loadConnectedUsers() {
+      const userContainer = document.getElementById('connectedUsers');
+      userContainer.innerHTML = '<p>현재 접속중인 사용자 목록을 로딩중입니다...</p>';
+      
+      try {
+        // 현재 사용자 IP 정보 획득 (간소화된 방법)
+        const getCurrentIP = async () => {
+          try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip;
+          } catch {
+            // IP 확인 실패 시 로컬IP 시뮬레이션
+            return '127.0.0.1';
+          }
+        };
+        
+        const userIP = await getCurrentIP();
+        const allUsers = {};
+        
+        // 모든 메시지에서 고유 사용자들을 수집
+        messages.forEach(msg => {
+          if (msg.nick && msg.nick !== 'System') {
+            if (!allUsers[msg.nick]) {
+              allUsers[msg.nick] = {
+                name: msg.nick,
+                lastSeen: msg.t,
+                ip: userIP
+              };
+            }
+          }
+        });
+        
+        // 현재 로컬 사용자 추가
+        allUsers[nickname] = {
+          name: `${nickname} (현재)`,
+          lastSeen: Date.now(),
+          ip: userIP
+        };
+        
+        // 접속자들을 마지막 활동 시간순으로 정렬
+        const userItems = Object.values(allUsers)
+          .sort((a, b) => b.lastSeen - a.lastSeen)
+          .map(user => `
+            <div class="user-item">
+              <span>${user.name}</span>
+              <span style="font-size: 12px; color: #5f6368;">${user.ip}</span>
+              <span style="font-size: 11px; color: #9aa0a6; margin-left: 8px;">${new Date(user.lastSeen).toLocaleTimeString()}</span>
+            </div>
+          `).join('');
+        
+        userContainer.innerHTML = `
+          <div class="user-list">
+            ${userItems || '<div class="user-item"><span style="color: #5f6368;">현재 접속자 없음</span></div>'}
+          </div>
+        `;
+        
+      } catch (error) {
+        console.error('사용자 목록 로드 실패:', error);
+        userContainer.innerHTML = '<div class="user-item"><span style="color: #ea4335;">사용자 목록을 로드할 수 없습니다.</span></div>';
+      }
+    }
+
+    // 비밀번호 입력창에서 엔터키도 지원
+    document.getElementById('adminPasswordInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('adminLogin').click();
+      }
+    });
+
+    // 약관 리셋 팝업 이벤트들
+    document.getElementById('confirmReset').addEventListener('click', async () => {
+      await resetAllMessages();
+      document.getElementById('resetPopup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+      alert('모든 대화가 초기화되었습니다.');
+    });
+
+    document.getElementById('cancelReset').addEventListener('click', () => {
+      document.getElementById('resetPopup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    });
+
+    document.getElementById('closeResetPopup').addEventListener('click', () => {
+      document.getElementById('resetPopup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    });
+
     render();
   </script>
-
-  <div class="footer">
-    <div class="left">대한민국</div>
-    <div class="right">
-      <a href="#">광고</a>
-      <a href="#">비즈니스</a>
-      <a href="#">검색의 원리</a>
-      <a href="#">개인정보처리방침</a>
-      <a href="#">약관</a>
-      <a href="#">설정</a>
-    </div>
-  </div>
 </body>
 </html>
