@@ -335,13 +335,14 @@
     </div>
   </div>
 
+
   <div class="footer-bar">
     <div class="footer-top">
       <span id="koreaBtn" class="footer-link">대한민국</span>
     </div>
     <div class="footer-bottom">
       <div class="footer-bottom-left">
-        <a href="#" class="footer-link">광고</a>
+        <a href="#" id="adsBtn" class="footer-link">광고</a>
         <a href="#" class="footer-link">비즈니스</a>
         <a href="#" class="footer-link">검색의 원리</a>
       </div>
@@ -763,6 +764,17 @@
       document.getElementById('resetPopup').style.display = 'none';
       document.getElementById('overlay').style.display = 'none';
     });
+
+    // 광고 안내 팝업 이벤트들 - 사용법 안내 표시
+    document.getElementById('adsBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      // 다시보지않기 상태 해제
+      localStorage.removeItem('dontShowHelp');
+      // 사용법 안내 팝업 표시
+      document.getElementById('helpPopup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    });
+
 
     render();
   </script>
